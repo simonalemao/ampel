@@ -1,12 +1,13 @@
 /*
  * Simons Bibliothek für das Projekt "Ampel"
  * Modul: Eingebettete Software
+ * 2020
  */
 
 #include "Trafficlight.h"
 
 Trafficlight::Trafficlight(int pin_red, int pin_yellow, int pin_green,
-		int msForSecond) {
+		int msForSecond, int redGreenDur) {
 	redPin = pin_red;
 	yellowPin = pin_yellow;
 	greenPin = pin_green;
@@ -15,12 +16,24 @@ Trafficlight::Trafficlight(int pin_red, int pin_yellow, int pin_green,
 	pinMode(yellowPin, OUTPUT);
 	pinMode(greenPin, OUTPUT);
 
-	if (msForSecond < 200) {
+	if (msForSecond == 0) {
+		thisSec = 1000;
+	} else if (msForSecond < 200) {
 		thisSec = 200;
 	} else if (msForSecond < 10000) {
 		thisSec = msForSecond;
 	} else {
 		thisSec = 10000;
+	}
+
+	if (redGreenDur == 0) {
+		thisSec = 5000;
+	} else if (redGreenDur < 1000) {
+		thisSec = 1000;
+	} else if (redGreenDur < 30000) {
+		thisSec = redGreenDur;
+	} else {
+		thisSec = 30000;
 	}
 
 	init();
@@ -32,33 +45,12 @@ void Trafficlight::init() {
 	digitalWrite(greenPin, LOW);
 }
 
-void Trafficlight::wakeUp() {
-	// Start mit grün
-	digitalWrite(redPin, LOW);
-	digitalWrite(yellowPin, LOW);
-	digitalWrite(greenPin, HIGH);
-}
-
-void Trafficlight::fallAsleep() {
-
-}
-
-void Trafficlight::stopAndGo() {
-	// Start mit grün
-	digitalWrite(redPin, LOW);
-	digitalWrite(yellowPin, LOW);
-	digitalWrite(greenPin, HIGH);
-	delay(1 * msForSecond);
-
-	// Gelb
-	digitalWrite(yellowPin, HIGH);
-	digitalWrite(greenPin, LOW);
-	delay(3 * msForSecond);
-
-	// Rot
+void Trafficlight::stopGoStop() {
+	// Start mit rot
 	digitalWrite(redPin, HIGH);
 	digitalWrite(yellowPin, LOW);
-	delay(5 * msForSecond);
+	digitalWrite(greenPin, LOW);
+	delay(redGreenDur);
 
 	// Rot-Gelb
 	digitalWrite(yellowPin, HIGH);
@@ -66,9 +58,18 @@ void Trafficlight::stopAndGo() {
 
 	// Grün
 	digitalWrite(greenPin, HIGH);
+	digitalWrite(yellowPin, LOW);
+	delay(redGreenDur);
+
+	// Gelb
+	digitalWrite(yellowPin, HIGH);
+	digitalWrite(greenPin, LOW);
+	delay(3 * msForSecond);
+
+	// Rot
+	digitalWrite(greenPin, HIGH);
 	digitalWrite(redPin, LOW);
 	digitalWrite(yellowPin, LOW);
-
 }
 
 void Trafficlight::animate() {
@@ -87,4 +88,16 @@ void Trafficlight::animate() {
 
 		count++;
 	}
+}
+
+void Trafficlight::flash() {
+	// Gelb
+	digitalWrite(greenPin, LOW);
+	digitalWrite(redPin, LOW);
+	digitalWrite(yellowPin, HIGH);
+	delay(thisSec);
+
+	// Aus
+	digitalWrite(yellowPin, LOW);
+	delay(thisSec);
 }

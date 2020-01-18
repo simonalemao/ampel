@@ -1,6 +1,7 @@
 /*
  * Simons Bibliothek für das Projekt "Ampel"
  * Modul: Eingebettete Software
+ * 2020
  */
 
 #ifndef Trafficlight_h
@@ -19,38 +20,35 @@ public:
 	 * @param pin_red Pin, der das grüne Licht symbolisiert
 	 * @param msForSecond Die Dauer einer Sekunde in Millisekunden.
 	 * 			Geschwindikeit, in der die Ampel schalten soll
-	 * 			(Mininum: 200, Maximum: 10000)
+	 * 			(Mininum: 200, Maximum: 10000; bei 0: 1000 ms)
+	 * @param redGreenDur Die Dauer der Rot- und Grünphase in Millisekunden
+	 * 			(Minimum: 1000, Maximum: 30000; bei 0: 5000 ms)
 	 */
-	Trafficlight(int pin_red, int pin_yellow, int pin_green, int msForSecond);
+	Trafficlight(int pin_red, int pin_yellow, int pin_green, int msForSecond, int redGreenDur);
 
 	/**
-	 * Schaltet den normalen Modus an
+	 * Schaltet auf rot, grün und dann wieder auf rot
 	 */
-	void wakeUp();
-
-	/**
-	 * Schaltet den Schlafmodus an
-	 */
-	void fallAsleep();
-
-	/**
-	 * Schaltet auf rot und dann wieder auf grün
-	 */
-	void stopAndGo();
+	void stopGoStop();
 
 	/**
 	 * Animation, die die Lichter der Reihe nach anschaltet
 	 */
 	void animate();
 
+	/*
+	 * Lässt das gelbe Licht aufleuchten
+	 */
+	void flash();
+
 private:
 
 	int redPin;
 	int yellowPin;
 	int greenPin;
-	int thisSec;
 
-	unsigned long lastMillis;
+	int thisSec;
+	int redGreenDur;
 
 	void init();
 
