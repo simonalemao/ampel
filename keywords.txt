@@ -1,0 +1,4 @@
+Traffiglight	KEYWORD1
+stopGoStop	KEYWORD2
+animate	KEYWORD2
+flash	KEYWORD2

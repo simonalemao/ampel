@@ -1,5 +1,5 @@
 /*
- * Simons Bibliothek für das Projekt "Ampel"
+ * Trafficlight.cpp - Simons Bibliothek für das Projekt "Ampel"
  * Modul: Eingebettete Software
  * 2020
  */
@@ -7,7 +7,7 @@
 #include "Trafficlight.h"
 
 Trafficlight::Trafficlight(int pin_red, int pin_yellow, int pin_green,
-		int msForSecond, int redGreenDur) {
+		int msForSecond, int msForRedAndGreen) {
 	redPin = pin_red;
 	yellowPin = pin_yellow;
 	greenPin = pin_green;
@@ -26,14 +26,14 @@ Trafficlight::Trafficlight(int pin_red, int pin_yellow, int pin_green,
 		thisSec = 10000;
 	}
 
-	if (redGreenDur == 0) {
-		thisSec = 5000;
-	} else if (redGreenDur < 1000) {
-		thisSec = 1000;
-	} else if (redGreenDur < 30000) {
-		thisSec = redGreenDur;
+	if (msForRedAndGreen == 0) {
+		redGreenDur = 5000;
+	} else if (msForRedAndGreen < 1000) {
+		redGreenDur = 1000;
+	} else if (msForRedAndGreen < 30000) {
+		redGreenDur = msForRedAndGreen;
 	} else {
-		thisSec = 30000;
+		redGreenDur = 30000;
 	}
 
 	init();
@@ -54,7 +54,7 @@ void Trafficlight::stopGoStop() {
 
 	// Rot-Gelb
 	digitalWrite(yellowPin, HIGH);
-	delay(2 * msForSecond);
+	delay(2 * thisSec);
 
 	// Grün
 	digitalWrite(greenPin, HIGH);
@@ -64,7 +64,7 @@ void Trafficlight::stopGoStop() {
 	// Gelb
 	digitalWrite(yellowPin, HIGH);
 	digitalWrite(greenPin, LOW);
-	delay(3 * msForSecond);
+	delay(3 * thisSec);
 
 	// Rot
 	digitalWrite(greenPin, HIGH);

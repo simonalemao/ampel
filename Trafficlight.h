@@ -1,5 +1,5 @@
 /*
- * Simons Bibliothek für das Projekt "Ampel"
+ * Trafficlight.h - Simons Bibliothek für das Projekt "Ampel"
  * Modul: Eingebettete Software
  * 2020
  */
@@ -24,10 +24,10 @@ public:
 	 * @param redGreenDur Die Dauer der Rot- und Grünphase in Millisekunden
 	 * 			(Minimum: 1000, Maximum: 30000; bei 0: 5000 ms)
 	 */
-	Trafficlight(int pin_red, int pin_yellow, int pin_green, int msForSecond, int redGreenDur);
+	Trafficlight(int pin_red, int pin_yellow, int pin_green, int msForSecond, int msForRedAndGreen);
 
 	/**
-	 * Schaltet auf rot, grün und dann wieder auf rot
+	 * Schaltet auf rot, grün und wieder auf rot
 	 */
 	void stopGoStop();
 
