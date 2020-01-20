@@ -4,75 +4,85 @@
 // ENUM für Modus
 typedef enum {
   FLASHING = 0,
-  RUNNING
+  RUNNING,
+  SLEEP,
+  HOLD
 } trafficlfght_mode;
 
-Trafficlight tf = Trafficlight(11, 9, 7, 1, 1);
+Trafficlight tf = Trafficlight(8, 7, 6, 1, 1);
 unsigned long pushed, flashing_since;
 boolean _remain = false;
 trafficlfght_mode tf_mode;
+const byte pushPin = 2;
+const byte unpushPin = 3;
 
 void setup() {
-  pinMode(5, INPUT_PULLUP);
+  pinMode(pushPin, INPUT_PULLUP);
+  pinMode(unpushPin, INPUT_PULLUP);
 
-  attachInterrupt(digitalPinToInterrupt(2), push, RISING);
-  attachInterrupt(digitalPinToInterrupt(2), unpush, FALLING);
+  attachInterrupt(digitalPinToInterrupt(pushPin), push, FALLING);
+  attachInterrupt(digitalPinToInterrupt(unpushPin), unpush, RISING);
 
   tf_mode = FLASHING;
   flashing_since = millis();
 
+  Serial.begin(9600);
+  delay(1000);
+  Serial.println("animate");
   tf.animate();
 }
 
 void loop() {
   switch (tf_mode) {
     case FLASHING:
+      Serial.println("flashing");
       tf.flash();
-      if (flashing_since > 20000) {
-        _remain = !_remain;
-        remain();
+      if ((millis() - flashing_since) > 20000) {
+  tf_mode = SLEEP;
       }
       break;
     case RUNNING:
-      tf.stopGoStop();
+      Serial.println("running");
+      tf.stopGoStop(RED);
+      break;
+    case SLEEP:
       break;
   }
 }
 
 void push() {
   pushed = millis();
+  Serial.println("push");
 }
 
 void unpush() {
+  Serial.println("unpush");
   unsigned long diff = millis() - pushed;
-  if (diff < 30) {
+  if (diff < 50) {
     // nichts tun: Interrupt schnell beenden
+    Serial.println("too short");
   } else {
     switch (tf_mode) {
 
       case FLASHING:
-        if (_remain) {
-          _remain = !_remain;
-        } else {
-          tf_mode = RUNNING;
-        }
+        tf_mode = RUNNING;
         break;
 
       case RUNNING:
         if (diff <= 500) {
-          _remain = !_remain;
-          remain();
+          Serial.println("short press");
+          // Zusand beibehalten
         } else {
+          Serial.println("long press");
           tf_mode = FLASHING;
-          flashing_since = millis();
+          flashing_since = millis() + 5000;
         }
         break;
+
+      case SLEEP:
+        tf_mode = FLASHING;
+        flashing_since = millis();
+        break;
     }
-  }
-}
-
-void remain() {
-  while (_remain) {
-
   }
 }
