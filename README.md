@@ -10,6 +10,8 @@ Trafficlight(int pin_red, int pin_yellow, int pin_green, int msForSecond, int ms
 * pin_yellow: Pin, der das gelbe Licht symbolisiert
 * pin_red: Pin, der das grüne Licht symbolisiert
 
+Sekunden werden im Konstruktor definiert.
+
 ## Funktionen
 
 ```
@@ -45,12 +47,10 @@ Stellt ein, ob die Ampel weiterlaufen soll oder nicht.
 ## Sonstiges
 
 
-Um ein Prellen des Tasters auszuschließen werden nur Signale über 30ms weiterverarbeitet. ([https://de.wikipedia.org/wiki/Prellen](https://de.wikipedia.org/wiki/Prellen))
+Um ein Prellen des Tasters auszuschließen werden nur Signale über 50 ms weiterverarbeitet. ([https://de.wikipedia.org/wiki/Prellen](https://de.wikipedia.org/wiki/Prellen))
 
-Ein kurzes Drücken des Tasters darf höchstens 500 ms dauern
-Ein langes Drücken des Tasters muss mindestens 501 ms dauern
-
-Sekunden werden im Konstruktor definiert. Das gilt nicht für die Zeit nach der die Ampel in den Schlafmodus gehen soll.
+Ein kurzes Drücken des Tasters darf höchstens 700 ms dauern
+Ein langes Drücken des Tasters muss mindestens 701 ms dauern.
 
 Die Länge der Rot- und der Grünphase werden im Konstruktor definiert.
 
