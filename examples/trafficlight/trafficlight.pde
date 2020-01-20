@@ -10,15 +10,15 @@ typedef enum {
 // Red pin = 8
 // Yellow pin = 7
 // Green pin = 6
-// Second defined as 0 ms (turns to 1000 ms automatically)
-// Red/Green timeout set to 0 ms (turns to 5000 ms automatically)
+// Sekunde als 0 ms (turns to 1000 ms automatically)
+// Red/Green timeout: 0 ms (turns to 5000 ms automatically)
 Trafficlight tf = Trafficlight(8, 7, 6, 0, 0);
 
 unsigned long pushed, flashing_since;
 boolean _remain = false;
 trafficlfght_mode tf_mode;
 
-// Both pins connected to same Button
+// Beide pins an denselbem Taster angeschlossen
 const byte pushPin = 2;
 const byte unpushPin = 3;
 
@@ -85,7 +85,7 @@ void unpush() {
           Serial.println("continue");
         } else if (diff <= 700) {
           Serial.println("short press");
-          // Zusand beibehalten
+          // Zustand beibehalten
           tf.setContinue(false);
           Serial.println("dont continue");
         } else {
