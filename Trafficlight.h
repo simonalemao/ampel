@@ -13,13 +13,6 @@ class Trafficlight {
 public:
 
 	/**
-	 * Enum für den Status, den die Ampel gerade anzeigt
-	 */
-	typedef enum {
-		RED = 0, RED_YELLLOW, GREEN, YELLOW
-	}TF_Status;
-
-	/**
 	 * Konstruktor
 	 *
 	 * @param pin_red Pin, der das rote Licht symbolisiert
@@ -36,7 +29,7 @@ public:
 	/**
 	 * Schaltet auf rot, grün und dann wieder auf rot
 	 */
-	void stopGoStop(TF_Status startFrom);
+	void stopGoStop();
 
 	/**
 	 * Animation, die die Lichter der Reihe nach anschaltet
@@ -48,7 +41,15 @@ public:
 	 */
 	void flash();
 
-	TF_Status getTFStatus();
+	/**
+	 * Behält den übergebenen Zustand für eine Sekunde
+	 */
+	void hold(int tf_status);
+
+	/**
+	 * Übergibt den letzten Status
+	 */
+	int getTFStatus();
 
 private:
 
@@ -59,7 +60,7 @@ private:
 	int thisSec;
 	int redGreenDur;
 
-	TF_Status actual_tf_status;
+	int actual_tf_status;
 };
 
 #endif

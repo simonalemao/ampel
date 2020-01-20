@@ -14,7 +14,7 @@ boolean _remain = false;
 trafficlfght_mode tf_mode;
 const byte pushPin = 2;
 const byte unpushPin = 3;
-TF_Status lastTFStatus;
+int lastTFStatus;
 
 void setup() {
   pinMode(pushPin, INPUT_PULLUP);
@@ -25,7 +25,7 @@ void setup() {
 
   tf_mode = FLASHING;
   flashing_since = millis();
-  lastTFStatus=getTFStatus();
+  lastTFStatus = tf.getTFStatus();
 
   Serial.begin(9600);
   delay(1000);
@@ -35,18 +35,25 @@ void setup() {
 
 void loop() {
   switch (tf_mode) {
+
     case FLASHING:
       Serial.println("flashing");
       tf.flash();
       if ((millis() - flashing_since) > 20000) {
-  tf_mode = SLEEP;
+        tf_mode = SLEEP;
       }
       break;
+
     case RUNNING:
       Serial.println("running");
-      tf.stopGoStop(RED);
+      tf.stopGoStop();
       break;
+
     case SLEEP:
+      break;
+
+    case HOLD:
+      tf.hold(lastTFStatus);
       break;
   }
 }
@@ -73,6 +80,7 @@ void unpush() {
         if (diff <= 500) {
           Serial.println("short press");
           // Zusand beibehalten
+          lastTFStatus = tf.getTFStatus();
         } else {
           Serial.println("long press");
           tf_mode = FLASHING;
