@@ -42,14 +42,15 @@ public:
 	void flash();
 
 	/**
-	 * Behält den übergebenen Zustand für eine Sekunde
-	 */
-	void hold(int tf_status);
-
-	/**
 	 * Übergibt den letzten Status
 	 */
 	int getTFStatus();
+
+	/**
+	 * Setze, ob die Phase fortgesetzt werden soll
+	 */
+	void setContinue(bool b);
+	bool getContinue();
 
 private:
 
@@ -60,7 +61,8 @@ private:
 	int thisSec;
 	int redGreenDur;
 
-	int actual_tf_status;
+	int next_tf_status;
+	bool cont;
 };
 
 #endif
