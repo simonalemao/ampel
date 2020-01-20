@@ -1,4 +1,4 @@
-/*
+/**
  * Trafficlight.h - Simons Bibliothek für das Projekt "Ampel"
  * Modul: Eingebettete Software
  * 2020
@@ -27,16 +27,23 @@ public:
 	Trafficlight(int pin_red, int pin_yellow, int pin_green, int msForSecond, int msForRedAndGreen);
 
 	/**
-	 * Schaltet auf rot, grün und wieder auf rot
+	 * Enum für den Status, den die Ampel gerade anzeigt
 	 */
-	void stopGoStop();
+	typedef enum {
+		RED = 0, RED_YELLLOW, GREEN, YELLOW
+	}tf_status;
+
+	/**
+	 * Schaltet auf rot, grün und dann wieder auf rot
+	 */
+	tf_status stopGoStop(tf_status startFrom);
 
 	/**
 	 * Animation, die die Lichter der Reihe nach anschaltet
 	 */
 	void animate();
 
-	/*
+	/**
 	 * Lässt das gelbe Licht aufleuchten
 	 */
 	void flash();
@@ -49,9 +56,6 @@ private:
 
 	int thisSec;
 	int redGreenDur;
-
-	void init();
-
 };
 
 #endif

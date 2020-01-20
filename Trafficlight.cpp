@@ -1,4 +1,4 @@
-/*
+/**
  * Trafficlight.cpp - Simons Bibliothek für das Projekt "Ampel"
  * Modul: Eingebettete Software
  * 2020
@@ -36,16 +36,9 @@ Trafficlight::Trafficlight(int pin_red, int pin_yellow, int pin_green,
 		redGreenDur = 30000;
 	}
 
-	init();
 }
 
-void Trafficlight::init() {
-	digitalWrite(redPin, LOW);
-	digitalWrite(yellowPin, LOW);
-	digitalWrite(greenPin, LOW);
-}
-
-void Trafficlight::stopGoStop() {
+tf_status Trafficlight::stopGoStop(tf_status startFrom) {
 	// Start mit rot
 	digitalWrite(redPin, HIGH);
 	digitalWrite(yellowPin, LOW);
@@ -59,6 +52,7 @@ void Trafficlight::stopGoStop() {
 	// Grün
 	digitalWrite(greenPin, HIGH);
 	digitalWrite(yellowPin, LOW);
+	digitalWrite(redPin, LOW);
 	delay(redGreenDur);
 
 	// Gelb
@@ -77,13 +71,13 @@ void Trafficlight::animate() {
 	while (count < 10) {
 
 		digitalWrite(redPin, HIGH);
-		delay(150);
+		delay(100);
 		digitalWrite(redPin, LOW);
 		digitalWrite(yellowPin, HIGH);
-		delay(150);
+		delay(100);
 		digitalWrite(yellowPin, LOW);
 		digitalWrite(greenPin, HIGH);
-		delay(150);
+		delay(100);
 		digitalWrite(greenPin, LOW);
 
 		count++;
@@ -101,3 +95,4 @@ void Trafficlight::flash() {
 	digitalWrite(yellowPin, LOW);
 	delay(thisSec);
 }
+
