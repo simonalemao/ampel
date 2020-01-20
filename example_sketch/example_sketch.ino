@@ -1,6 +1,5 @@
 #include <Trafficlight.h>
 
-
 // ENUM für Modus
 typedef enum {
   FLASHING = 0,
@@ -15,6 +14,7 @@ boolean _remain = false;
 trafficlfght_mode tf_mode;
 const byte pushPin = 2;
 const byte unpushPin = 3;
+TF_Status lastTFStatus;
 
 void setup() {
   pinMode(pushPin, INPUT_PULLUP);
@@ -25,6 +25,7 @@ void setup() {
 
   tf_mode = FLASHING;
   flashing_since = millis();
+  lastTFStatus=getTFStatus();
 
   Serial.begin(9600);
   delay(1000);
