@@ -42,11 +42,6 @@ public:
 	void flash();
 
 	/**
-	 * Übergibt den letzten Status
-	 */
-	int getTFStatus();
-
-	/**
 	 * Setze, ob die Phase fortgesetzt werden soll
 	 */
 	void setContinue(bool b);
