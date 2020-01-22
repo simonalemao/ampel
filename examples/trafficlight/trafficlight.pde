@@ -18,7 +18,7 @@ unsigned long pushed, flashing_since;
 boolean _remain = false;
 trafficlfght_mode tf_mode;
 
-// Beide pins an denselbem Taster angeschlossen
+// Beide pins an denselben Taster angeschlossen
 const byte pushPin = 2;
 const byte unpushPin = 3;
 
@@ -34,9 +34,6 @@ void setup() {
   tf_mode = FLASHING;
   flashing_since = millis();
 
-  Serial.begin(9600);
-  delay(1000);
-  Serial.println("animate");
   tf.animate();
 }
 
@@ -44,16 +41,13 @@ void loop() {
   switch (tf_mode) {
 
     case FLASHING:
-      Serial.println("flashing");
       tf.flash();
       if ((millis() - flashing_since) > 20000) {
         tf_mode = SLEEP;
-        Serial.println("sleep");
       }
       break;
 
     case RUNNING:
-      Serial.println("running");
       tf.stopGoStop();
       break;
 
@@ -64,11 +58,9 @@ void loop() {
 
 void push() {
   pushed = millis();
-  Serial.println("push");
 }
 
 void unpush() {
-  Serial.println("unpush");
   unsigned long diff = millis() - pushed;
   if (diff < 50) {
     // nichts tun: Interrupt schnell beenden
@@ -82,14 +74,10 @@ void unpush() {
       case RUNNING:
         if (!tf.getContinue()) {
           tf.setContinue(true);
-          Serial.println("continue");
         } else if (diff <= 700) {
-          Serial.println("short press");
           // Zustand beibehalten
           tf.setContinue(false);
-          Serial.println("dont continue");
         } else {
-          Serial.println("long press");
           // Zurück zu FLASHING
           tf_mode = FLASHING;
           flashing_since = millis();
